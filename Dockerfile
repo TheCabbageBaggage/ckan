@@ -64,13 +64,14 @@ RUN /bin/bash -c "source $CKAN_VENV/bin/activate && cd $CKAN_VENV/src && \
     pip install -r ckanext-dcat/requirements.txt && \
     pip install -e git+https://github.com/sedici/ckanext-oaipmh_repository.git#egg=ckanext-oaipmh_repository && \
     pip install -e git+https://github.com/sedici/ckanext-package_converter.git#egg=ckanext-package_converter && \
-    pip install -r ckanext-package_converter/requirements.txt && \
+    pip install -r ckanext-package-converter/requirements.txt && \
     pip install -e git+https://github.com/ckan/ckanext-scheming.git#egg=ckanext-scheming && \
     pip install -r ckanext-scheming/requirements.txt && \
     pip install ckanext-pdfview"
 
 
 ENTRYPOINT ["/ckan-entrypoint.sh"]
+
 
 USER ckan
 EXPOSE 5000
