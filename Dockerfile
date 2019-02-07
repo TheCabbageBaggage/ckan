@@ -15,6 +15,8 @@ RUN apt-get -q -y update \
         libxslt-dev \
         libgeos-dev \
         libssl-dev \
+        libsasl2-dev \
+        libldap-dev \
         libffi-dev \
         postgresql-client \
         build-essential \
@@ -52,6 +54,21 @@ RUN ckan-pip install -U pip && \
     cp -v $CKAN_VENV/src/ckan/contrib/docker/ckan-entrypoint.sh /ckan-entrypoint.sh && \
     chmod +x /ckan-entrypoint.sh && \
     chown -R ckan:ckan $CKAN_HOME $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH
+
+RUN /bin/bash -c "source $CKAN_VENV/bin/activate && cd $CKAN_VENV/src && \
+    pip install -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest && \
+    pip install -r ckanext-harvest/pip-requirements.txt && \
+    pip install -e git+https://github.com/NaturalHistoryMuseum/ckanext-doi#egg=ckanext-doi && \
+    pip install -r ckanext-doi/requirements.txt && \
+    pip install -e git+https://github.com/ckan/ckanext-dcat.git#egg=ckanext-dcat && \
+    pip install -r ckanext-dcat/requirements.txt && \
+    pip install -e git+https://github.com/sedici/ckanext-oaipmh_repository.git#egg=ckanext-oaipmh_repository && \
+    pip install -e git+https://github.com/sedici/ckanext-package_converter.git#egg=ckanext-package_converter && \
+    pip install -r ckanext-package_converter/requirements.txt && \
+    pip install -e git+https://github.com/ckan/ckanext-scheming.git#egg=ckanext-scheming && \
+    pip install -r ckanext-scheming/requirements.txt && \
+    pip install ckanext-pdfview"
+
 
 ENTRYPOINT ["/ckan-entrypoint.sh"]
 
